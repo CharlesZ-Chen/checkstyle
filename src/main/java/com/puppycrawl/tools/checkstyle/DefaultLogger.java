@@ -53,7 +53,7 @@ public class DefaultLogger extends AutomaticBean implements AuditListener {
     private final boolean closeError;
 
     /** Formatter for the log message. */
-    private final AuditEventFormatter formatter;
+    protected final AuditEventFormatter formatter;
 
     /**
      * Creates a new {@code DefaultLogger} instance.

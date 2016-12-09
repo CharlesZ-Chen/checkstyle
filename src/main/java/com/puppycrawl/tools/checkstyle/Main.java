@@ -130,6 +130,9 @@ public final class Main {
     /** Name for 'plain' format. */
     private static final String PLAIN_FORMAT_NAME = "plain";
 
+    /** Name for 'json' format. */
+    private static final String JSON_FORMAT_NAME = "json";
+
     /** Don't create instance of this class, use {@link #main(String[])} method instead. */
     private Main() {
     }
@@ -277,10 +280,10 @@ public final class Main {
             // validate optional parameters
             if (cmdLine.hasOption(OPTION_F_NAME)) {
                 final String format = cmdLine.getOptionValue(OPTION_F_NAME);
-                if (!PLAIN_FORMAT_NAME.equals(format) && !XML_FORMAT_NAME.equals(format)) {
+                if (!PLAIN_FORMAT_NAME.equals(format) && !XML_FORMAT_NAME.equals(format) && !JSON_FORMAT_NAME.equals(format)) {
                     result.add(String.format("Invalid output format."
-                            + " Found '%s' but expected '%s' or '%s'.",
-                            format, PLAIN_FORMAT_NAME, XML_FORMAT_NAME));
+                            + " Found '%s' but expected '%s' or '%s' or '%s'.",
+                            format, PLAIN_FORMAT_NAME, XML_FORMAT_NAME, JSON_FORMAT_NAME));
                 }
             }
             if (cmdLine.hasOption(OPTION_P_NAME)) {
@@ -511,6 +514,10 @@ public final class Main {
             listener = new DefaultLogger(out, closeOutputStream, out, false);
 
         }
+        else if (JSON_FORMAT_NAME.equals(format)) {
+            listener = new HackJsonLogger(out, closeOutputStream);
+
+        }
         else {
             if (closeOutputStream) {
                 CommonUtils.close(out);
@@ -610,8 +617,8 @@ public final class Main {
         options.addOption(OPTION_O_NAME, true, "Sets the output file. Defaults to stdout");
         options.addOption(OPTION_P_NAME, true, "Loads the properties file");
         options.addOption(OPTION_F_NAME, true, String.format(
-                "Sets the output format. (%s|%s). Defaults to %s",
-                PLAIN_FORMAT_NAME, XML_FORMAT_NAME, PLAIN_FORMAT_NAME));
+                "Sets the output format. (%s|%s|%s). Defaults to %s",
+                PLAIN_FORMAT_NAME, XML_FORMAT_NAME, JSON_FORMAT_NAME, PLAIN_FORMAT_NAME));
         options.addOption(OPTION_V_NAME, false, "Print product version and exit");
         options.addOption(OPTION_T_NAME, OPTION_TREE_NAME, false,
                 "Print Abstract Syntax Tree(AST) of the file");

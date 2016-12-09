@@ -313,6 +313,17 @@
       <scope>test</scope>
       <classifier>runtime</classifier>
     </dependency>
+    <!-- hack on providing json printer -->
+    <dependency>
+    <groupId>javax.json</groupId>
+    <artifactId>javax.json-api</artifactId>
+    <version>1.0</version>
+    </dependency>
+    <dependency>
+    <groupId>org.glassfish</groupId>
+    <artifactId>javax.json</artifactId>
+    <version>1.0.4</version>
+   </dependency>
   </dependencies>
 
   <build>

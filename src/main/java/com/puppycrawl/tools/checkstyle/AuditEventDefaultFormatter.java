@@ -88,7 +88,7 @@ public class AuditEventDefaultFormatter implements AuditEventFormatter {
      * @param event audit ivent.
      * @return check name without 'Check' suffix.
      */
-    private static String getCheckShortName(AuditEvent event) {
+    protected static String getCheckShortName(AuditEvent event) {
         final String checkFullName = event.getSourceName();
         final String checkShortName;
         final int lastDotIndex = checkFullName.lastIndexOf('.');
