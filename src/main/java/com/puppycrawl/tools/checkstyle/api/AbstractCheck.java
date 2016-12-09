@@ -43,7 +43,7 @@ public abstract class AbstractCheck extends AbstractViolationReporter {
     private FileContents fileContents;
 
     /** The object for collecting messages. */
-    private LocalizedMessages messages;
+    protected LocalizedMessages messages;
 
     /** The tab width for column reporting. */
     private int tabWidth = DEFAULT_TAB_WIDTH;

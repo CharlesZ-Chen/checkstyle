@@ -136,7 +136,7 @@ public abstract class AbstractViolationReporter
      * @param key key to locale message format
      * @param args arguments to format
      */
-    protected final void log(DetailAST ast, String key, Object... args) {
+    protected void log(DetailAST ast, String key, Object... args) {
         log(ast.getLineNo(), ast.getColumnNo(), key, args);
     }
 

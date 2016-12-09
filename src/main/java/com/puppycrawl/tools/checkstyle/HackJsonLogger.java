@@ -30,9 +30,9 @@ implements AuditListener {
 
     private HashMap<String, JsonArrayBuilder> issueEventsMap;
 
-    private enum InterestingIssue {
+    protected enum InterestingIssue {
         
-        MULTI_DECL("MultipleVariableDeclarations");
+        MULTI_DECL("HackedMultipleVariableDeclarations");
         private String checkShortName;
 
         private InterestingIssue(String checkShortName) {
