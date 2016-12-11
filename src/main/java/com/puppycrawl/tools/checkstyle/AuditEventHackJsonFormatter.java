@@ -12,8 +12,7 @@ public class AuditEventHackJsonFormatter extends AuditEventDefaultFormatter {
     public JsonObject jsonFormat(AuditEvent event) {
         JsonObjectBuilder jsonObjBuilder = Json.createObjectBuilder()
                 .add("file", event.getFileName())
-                .add("line", event.getLine())
-                .add("column", event.getColumn());
+                .add("line", event.getLine());
         if (getCheckShortName(event).equals(InterestingIssue.MULTI_DECL.toString())) {
             // Note: this is a hack, to using custom message in LocalizedMessage to record the declared type,
             // Note: in order to propagated type information to output
