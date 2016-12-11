@@ -21,7 +21,8 @@ public class HackedMultipleVariableDeclarationsCheck extends MultipleVariableDec
                     getSeverityLevel(),
                     getId(),
                     getClass(),
-                    // Note: this is a hack, propagated declaredType info by customMessage in LocalizedMessage
+                    // Note: this is a hack, propagated declaredType info 
+                    //       by customMessage in LocalizedMessage
                     declaredType));
     }
 }

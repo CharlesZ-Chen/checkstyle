@@ -280,7 +280,9 @@ public final class Main {
             // validate optional parameters
             if (cmdLine.hasOption(OPTION_F_NAME)) {
                 final String format = cmdLine.getOptionValue(OPTION_F_NAME);
-                if (!PLAIN_FORMAT_NAME.equals(format) && !XML_FORMAT_NAME.equals(format) && !JSON_FORMAT_NAME.equals(format)) {
+                if (!PLAIN_FORMAT_NAME.equals(format)
+                        && !XML_FORMAT_NAME.equals(format)
+                        && !JSON_FORMAT_NAME.equals(format)) {
                     result.add(String.format("Invalid output format."
                             + " Found '%s' but expected '%s' or '%s' or '%s'.",
                             format, PLAIN_FORMAT_NAME, XML_FORMAT_NAME, JSON_FORMAT_NAME));

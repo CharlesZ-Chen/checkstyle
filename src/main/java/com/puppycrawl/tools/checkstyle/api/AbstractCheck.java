@@ -42,9 +42,6 @@ public abstract class AbstractCheck extends AbstractViolationReporter {
     /** The current file contents. */
     private FileContents fileContents;
 
-    /** The object for collecting messages. */
-    protected LocalizedMessages messages;
-
     /** The tab width for column reporting. */
     private int tabWidth = DEFAULT_TAB_WIDTH;
 
@@ -53,6 +50,9 @@ public abstract class AbstractCheck extends AbstractViolationReporter {
      * be set by my creator.
      */
     private ClassLoader classLoader;
+
+    /** The object for collecting messages. */
+    protected LocalizedMessages messages;
 
     /**
      * Returns the default token a check is interested in. Only used if the

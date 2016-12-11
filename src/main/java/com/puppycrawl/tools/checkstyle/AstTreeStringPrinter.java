@@ -152,72 +152,71 @@ public final class AstTreeStringPrinter {
         return messageBuilder.toString();
     }
 
-
     /**
-     * assumption: {@code ast} would always be a VARIABLE_DEF tree
-     * @param ast
-     * @return
+     * Assumption: {@code ast} would always be a VARIABLE_DEF tree.
+     * @param ast a VARIABLE_DEF tree
+     * @return declared type of this Var Decl {@code ast}
      */
     public static String getDeclarationTypeFromVarDecl(DetailAST ast) {
-        DetailAST modifiers = ast.getFirstChild();
-        DetailAST type = modifiers.getNextSibling().getFirstChild();
-        StringBuilder typeSb = new StringBuilder();
-        StringBuilder modifiersSb = new StringBuilder();
+        final DetailAST modifiers = ast.getFirstChild();
+        final DetailAST type = modifiers.getNextSibling().getFirstChild();
+        final StringBuilder typeSb = new StringBuilder();
+        final StringBuilder modifiersSb = new StringBuilder();
         buildModifiers(modifiers, modifiersSb);
         buildType(type, typeSb);
         return modifiersSb.toString() + typeSb.toString();
     }
 
     /**
-     *
-     * @param modifiers
-     * @param modifierSb
+     * Build modifiers to a string.
+     * @param modifiers a modifier tree
+     * @param modifierSb the string builder
      */
     private static void buildModifiers(DetailAST modifiers, StringBuilder modifierSb) {
-        if (modifiers.getChildCount() == 0) {
-            return;
-        }
-        DetailAST curChild = modifiers.getFirstChild();
-        while (curChild != null) {
-            modifierSb.append(excapeAllControlChars(curChild.getText()) + " ");
-            curChild = curChild.getNextSibling();
+        final String SAPCE_SEP = " ";
+        if (modifiers.getChildCount() != 0) {
+            DetailAST curChild = modifiers.getFirstChild();
+            while (curChild != null) {
+                modifierSb.append(excapeAllControlChars(curChild.getText()))
+                .append(SAPCE_SEP);
+                curChild = curChild.getNextSibling();
+            }
         }
     }
 
     /**
-     * primitive: int
-     * generic type: Map<TypeA, TypeB>
-     * class type: MyType
-     * @param type
-     * @return
+     * Build type to a string.
+     * @param type a type tree
+     * @param typeSb the string builder
      */
     private static void buildType(DetailAST type, StringBuilder typeSb) {
-        String typeStr = excapeAllControlChars(type.getText());
+        final String typeStr = excapeAllControlChars(type.getText());
 
         // special case for array type
         // for an array type "Type[]", the AST Tree is like below:
         // `--[
         //     |--TypeTree
         //`--]
-        if (typeStr.equals("[")) {
+        if ("[".equals(typeStr)) {
             buildType(type.getFirstChild(), typeSb);
             typeSb.append("[]");
-            return;
         }
-
-        typeSb.append(typeStr);
-        DetailAST typeArguments = type.getNextSibling();
-        if (typeArguments != null) {
-            DetailAST curChild = typeArguments.getFirstChild();
-            while(curChild != null) {
-                if (curChild.getChildCount() > 0) {
-                    // curChild is a type argument
-                    buildType(curChild.getFirstChild(), typeSb);
-                } else {
-                    // curChild is a character in {'<', '>', ','}
-                    typeSb.append(excapeAllControlChars(curChild.getText()));
+        else {
+            typeSb.append(typeStr);
+            final DetailAST typeArguments = type.getNextSibling();
+            if (typeArguments != null) {
+                DetailAST curChild = typeArguments.getFirstChild();
+                while (curChild != null) {
+                    if (curChild.getChildCount() > 0) {
+                        // curChild is a type argument
+                        buildType(curChild.getFirstChild(), typeSb);
+                    }
+                    else {
+                        // curChild is a character in {'<', '>', ','}
+                        typeSb.append(excapeAllControlChars(curChild.getText()));
+                    }
+                    curChild = curChild.getNextSibling();
                 }
-                curChild = curChild.getNextSibling();
             }
         }
     }

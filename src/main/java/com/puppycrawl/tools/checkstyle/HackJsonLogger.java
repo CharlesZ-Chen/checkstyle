@@ -1,3 +1,22 @@
+////////////////////////////////////////////////////////////////////////////////
+// checkstyle: Checks Java source code for adherence to a set of rules.
+// Copyright (C) 2001-2016 the original author or authors.
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+////////////////////////////////////////////////////////////////////////////////
+
 package com.puppycrawl.tools.checkstyle;
 
 import java.io.OutputStream;
@@ -20,15 +39,15 @@ import com.puppycrawl.tools.checkstyle.api.SeverityLevel;
 public class HackJsonLogger extends AutomaticBean
 implements AuditListener {
 
+    /** Close output stream in auditFinished. */
+    private final boolean closeStream;
+
     private AuditEventHackJsonFormatter formatter;
 
     /** Helper writer that allows easy encoding and printing. */
     private PrintWriter writer;
 
-    /** Close output stream in auditFinished. */
-    private final boolean closeStream;
-
-    private HashMap<String, JsonArrayBuilder> issueEventsMap;
+    private Map<String, JsonArrayBuilder> issueEventsMap;
 
     protected enum InterestingIssue {
         
@@ -57,6 +76,17 @@ implements AuditListener {
         }
     }
 
+    private static boolean isInterestedCheck(String checkShortName) {
+        boolean isInterested = false;
+        for (InterestingIssue issue : InterestingIssue.values()) {
+            if (issue.toString().equals(checkShortName)) {
+                isInterested = true;
+                break;
+            }
+        }
+        return isInterested;
+    }
+
     @Override
     public void auditStarted(AuditEvent event) {
         // do nothing, keep silence
@@ -82,33 +112,21 @@ implements AuditListener {
         final SeverityLevel severityLevel = event.getSeverityLevel();
         if (severityLevel != SeverityLevel.IGNORE) {
             String checkShortName = AuditEventHackJsonFormatter.getCheckShortName(event);
-            if (isInterestedCheck(checkShortName)) {
+            if (HackJsonLogger.isInterestedCheck(checkShortName)) {
                 JsonObject singleEvent = formatter.jsonFormat(event);
                 issueEventsMap.get(checkShortName).add(singleEvent);
             }
         }
     }
 
-    private boolean isInterestedCheck(String checkShortName) {
-        boolean isInterested = false;
-        for (InterestingIssue issue : InterestingIssue.values()) {
-            if (issue.toString().equals(checkShortName)) {
-                isInterested = true;
-                break;
-            }
-        }
-        return isInterested;
-    }
-
     @Override
     public void fileStarted(AuditEvent event) {
-        // TODO Auto-generated method stub
-        
+        // keep silence, do nothing
     }
 
     @Override
     public void fileFinished(AuditEvent event) {
-        
+        // keep silence, do nothing
     }
 
     @Override
